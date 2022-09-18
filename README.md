@@ -28,7 +28,7 @@ A second challenge we encountered was figuring out exactly how to use Google's G
 
 Of course, we learned much about and how to work with many new and fascinating technologies, but ultimately we learned that problem solving and overcoming obstacles is an experience better shared with a team. Collaboration and teamwork have been rare opportunities for the past few pandemic years, and _we are so excited to be back._
 
-## <span style="color:#8b5cf6">What's next for \***\*SocialRM\*\*** 🤖</span>
+## <span style="color:#8b5cf6">What's next for **SocialRM** 🤖</span>
 
 We would like to expand the features of **SocialRM** to be include more support for relationship features. For example, a wider customizability for circle can make it easier to group and manage messages to certain people. We may also implement support for text messaging aside form the current email messaging, using technologies such as Twilio.
 
