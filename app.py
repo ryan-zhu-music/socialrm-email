@@ -1,7 +1,9 @@
 import flask
 import base64
 from email.message import EmailMessage
+import json
 
+import google.auth
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from googleapiclient.errors import HttpError
@@ -48,12 +50,11 @@ def sendmail():
   u_from = f_headers['from']
   u_to = f_headers['to']
   msg_text = f_headers['msg']
-  mail_token = f_headers['token']
+  mail_token = json.loads(f_headers['token'])
   if app.debug: print("From: {} To: {}\r\nMessage:\r\n{}\r\nToken:\r\n{}".format(u_from, u_to, msg_text, mail_token))
   
   creds = Credentials.from_authorized_user_info(mail_token, SCOPES)
-  if creds and creds.expired and creds.refresh_token:
-    creds.refresh(Request())
+  if creds and creds.expired and creds.refresh_token: creds.refresh(Request())
   
   
   try:
@@ -67,9 +68,7 @@ def sendmail():
     encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
     
     create_message = {
-      'message':{
-        'raw': encoded_message
-      }
+      'raw': encoded_message
     }
     send_message = (service.users().messages().send(userId="me", body=create_message).execute())
     return 'Email sent. Message ID: {}'.format(send_message), 200
