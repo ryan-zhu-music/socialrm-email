@@ -1,4 +1,4 @@
-import flask
+from flask import Flask, request
 import base64
 from email.message import EmailMessage
 import json
@@ -10,36 +10,16 @@ from googleapiclient.errors import HttpError
 from googleapiclient.discovery import build
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
 
-app = flask.Flask(__name__)
-app.config["DEBUG"] = False
+app = Flask(__name__)
 
 @app.route('/')
 def index():
   return "Hello, World!"
 
-@app.route('/debug', methods=['POST'])
-def setDebug():
-  r_msg = "Current debug state: {}".format(app.debug)
-  r_code = 200
-  f_headers = flask.request.headers
-  if 'debug_state' in f_headers:
-    if f_headers['debug_state'].lower() == 'true':
-      app.config["DEBUG"] = True
-      r_msg = "Debug state set to true"
-      r_code = 200
-    elif f_headers['debug_state'].lower() == 'false':
-      app.config["DEBUG"] = False
-      r_msg = "Debug state set to false"
-      r_code = 200
-    else:
-      r_msg = "Invalid debug state"
-      r_code = 400
-  return r_msg, r_code
-
 # adapted significantly from google quickstart guides
 @app.route('/sendmail', methods=['POST'])
 def sendmail():
-  f_headers = flask.request.headers
+  f_headers = request.headers
   
   if app.debug: print(f_headers)
   
@@ -75,4 +55,5 @@ def sendmail():
   except HttpError as error:
     return 'An error has occured: {}'.format(error), 500
 
-app.run()
+if __name__ == '__main__':
+    app.run(threaded=True)
